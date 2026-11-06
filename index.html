@@ -1,0 +1,306 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Oahu Shelter and Respite</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: month picker, KPI strip, two trend charts, program-by-month heatmap, program detail, sortable table, notes. */
+:root{
+  --bg:#f3f6f8; --card:#ffffff; --ink:#14202b; --muted:#5a6976; --line:#dde4ea; --soft:#edf1f4;
+  --s1:#2a78d6; --s2:#eb6834;
+  --h1:#cde2fb; --h2:#86b6ef; --h3:#3987e5; --h4:#1c5cab; --h5:#0d366b; --cell0:#e9eef2;
+  --t1:#14202b; --t2:#14202b; --t3:#ffffff; --t4:#ffffff; --t5:#ffffff;
+  --accent:#2a78d6; --accent-ink:#ffffff; --warn:#b4540a; --warn-bg:#fdf0e3;
+  --font-display:'Bricolage Grotesque','Public Sans',system-ui,sans-serif;
+  --font-body:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1418; --card:#151d23; --ink:#e8eef2; --muted:#9bacb9; --line:#27323b; --soft:#1c262d;
+  --s1:#3987e5; --s2:#d95926;
+  --h1:#184f95; --h2:#256abf; --h3:#3987e5; --h4:#86b6ef; --h5:#cde2fb; --cell0:#1d2830;
+  --t1:#ffffff; --t2:#ffffff; --t3:#ffffff; --t4:#0e1418; --t5:#0e1418;
+  --accent:#3987e5; --accent-ink:#0b1116; --warn:#f0a35e; --warn-bg:#2a2016; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1418; --card:#151d23; --ink:#e8eef2; --muted:#9bacb9; --line:#27323b; --soft:#1c262d;
+  --s1:#3987e5; --s2:#d95926;
+  --h1:#184f95; --h2:#256abf; --h3:#3987e5; --h4:#86b6ef; --h5:#cde2fb; --cell0:#1d2830;
+  --t1:#ffffff; --t2:#ffffff; --t3:#ffffff; --t4:#0e1418; --t5:#0e1418;
+  --accent:#3987e5; --accent-ink:#0b1116; --warn:#f0a35e; --warn-bg:#2a2016; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--font-body);
+  padding-block:24px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:28px;line-height:1.15}
+h2{font-size:17px}
+.sub{color:var(--muted);margin:4px 0 0;max-width:72ch}
+.num{font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.card-h{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.card-h p{margin:0;color:var(--muted);font-size:13px;max-width:62ch}
+.bar{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center}
+.grp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lbl{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;background:var(--card);overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:6px 11px;font-size:13px;color:var(--muted);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:var(--soft);color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+button:focus-visible,select:focus-visible,th button:focus-visible,tr[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink);max-width:100%}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.kpi .v{font-family:var(--font-display);font-size:32px;font-weight:700;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:15px;font-weight:600;color:var(--muted);margin-left:2px}
+.kpi .d{font-size:12px;color:var(--muted);margin-top:4px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;margin-bottom:6px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.axis text{fill:var(--muted);font-size:11px;font-family:var(--font-body)}
+.grid line{stroke:var(--line);stroke-width:1}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 18px rgba(0,0,0,.14);z-index:5;min-width:150px;max-width:260px}
+.tip b{display:block;margin-bottom:4px}
+.tip .r{display:flex;align-items:center;gap:7px;justify-content:space-between}
+.tip .r span:first-child{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+.tip .r b{display:inline;margin:0}
+.tip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.scroll{overflow-x:auto}
+.hm-legend{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
+.hm-legend i{width:18px;height:12px;border-radius:2px;display:inline-block}
+.note-line{font-size:12px;color:var(--muted);margin:8px 0 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+th[aria-sort="ascending"] button::after{content:"▲";font-size:8px}
+th[aria-sort="descending"] button::after{content:"▼";font-size:8px}
+td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;vertical-align:middle}
+tr.prog{cursor:pointer}
+tr.prog:hover td,tr.prog.sel td{background:var(--soft)}
+td .nm{font-weight:600;min-width:140px;display:block;white-space:normal}
+.occbar{display:flex;align-items:center;gap:8px;justify-content:flex-end;min-width:150px}
+.occbar .track{flex:1;height:8px;background:var(--cell0);border-radius:4px;overflow:hidden;min-width:70px;max-width:110px}
+.occbar .fill{height:100%;background:var(--accent);border-radius:4px}
+.occbar span{width:42px;text-align:right}
+.up{color:var(--ink)} .dn{color:var(--muted)}
+.chip{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.warn{color:var(--warn);background:var(--warn-bg);border-color:transparent}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px 28px}
+.notes div{min-width:0}
+.notes b{display:flex;gap:8px;align-items:center;margin-bottom:2px}
+.notes p{margin:0;color:var(--muted);font-size:13px}
+.hatch{fill:url(#hatch)}
+@media (max-width:560px){h1{font-size:23px}.kpi .v{font-size:27px}}
+@media (prefers-reduced-motion:no-preference){.seg button{transition:background .12s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Oʻahu Shelter, Respite &amp; Treatment Stats</h1>
+    <p class="sub">Average monthly beds and occupancy across most emergency shelters, medical respite and treatment programs on Oʻahu. Excludes most transitional housing.</p>
+  </header>
+
+  <div class="card">
+    <div class="bar">
+      <div class="grp"><span class="lbl">Programs</span><div class="seg" id="f-type" role="group" aria-label="Program type"></div></div>
+      <div class="grp"><span class="lbl">Month</span><div class="seg" id="f-month" role="group" aria-label="Month"></div></div>
+    </div>
+  </div>
+
+  <section class="kpis" id="kpis" aria-label="Key figures"></section>
+
+  <div class="two">
+    <section class="card">
+      <div class="card-h"><h2>Capacity and occupied beds</h2></div>
+      <div class="legend" id="lg1"></div>
+      <div class="chart" id="c1"></div>
+    </section>
+    <section class="card">
+      <div class="card-h"><h2>System occupancy</h2></div>
+      <div class="legend" id="lg2"></div>
+      <div class="chart" id="c2"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-h">
+      <h2>Occupancy by program and month</h2>
+      <p>Average occupied divided by average capacity. With all programs shown, emergency shelters are listed first, then medical respite and treatment. Select a cell to open that program below.</p>
+    </div>
+    <div class="hm-legend" id="hm-legend"></div>
+    <div class="scroll"><div class="chart" id="heat" style="min-width:640px"></div></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h">
+      <h2 id="detail-title">Program detail</h2>
+      <div class="grp"><label class="lbl" for="prog">Program</label><select id="prog"></select></div>
+    </div>
+    <div class="legend" id="lg3"></div>
+    <div class="chart" id="c3"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-h">
+      <h2 id="table-title">Programs</h2>
+      <p>Figures for the selected month. Select a column to sort.</p>
+    </div>
+    <div class="scroll"><table id="tbl"></table></div>
+  </section>
+
+</div>
+
+<script>
+const DATA={"title":"Oʻahu Shelter, Respite & Treatment Monthly Average Capacity & Occupancy | January–October 2026","progs":[{"name":"Alana Ola Pono (AOP)","cap":[50,50,50,50,50,50,50,49.2,49.0,48.5],"occ":[47.3,48.2,48.6,49.8,49,49.4,49.2,48.8,48.4,48.2],"t":"s"},{"name":"FAC Waianae","cap":[12,12,12,50,50,51.2,68,50,50,50.0],"occ":[12,12,12,47.8,51,49.4,68,50,50,50.0],"t":"s"},{"name":"Family Promise","cap":[87,87.8,91,94,120,112.8,124,123.4,111.2,114.5],"occ":[51.3,24,74.0,66,84,88.8,103,95,98.4,109.5],"t":"s"},{"name":"Hale Imi Ola (Waikiki Vista)","cap":[132,132,159,159,108,100.8,117,120.0,122.4,131.0],"occ":[132,132,108.8,95.5,72.5,83.8,92.8,92.8,112.8,122.0],"t":"s"},{"name":"Hale Mauliola (HMO)","cap":[50,50,50.0,104,111,65,63.5,59.2,65,65.0],"occ":[42,34.5,48.8,60.5,63.5,63.4,60.8,54.2,58.8,59.5],"t":"s"},{"name":"Hau'ula FAC","cap":[39,38.7,39,38.7,39,39,34.5,20,20,26.0],"occ":[39,38.7,38.4,38.7,39,39,34.5,20,20,20.0],"t":"s"},{"name":"Hawaii Cedar Church","cap":[null,null,null,null,null,31,31,31,31,31.5],"occ":[null,null,null,null,null,27,29.5,30,29.4,27.8],"t":"s"},{"name":"HONU couples","cap":[8,16,8,16,16,8,8,8,8,8.0],"occ":[7.3,6.7,7.2,10,2,4.8,5,6.2,5.2,6.5],"t":"s"},{"name":"HONU families","cap":[32,32,32,40,40,24.8,32,38,46,48.0],"occ":[11.7,10.7,15.8,12.2,12.5,20,26.5,27,34.2,39.0],"t":"s"},{"name":"HONU females","cap":[14.3,12,14,14,14,8,8,8,8,14.0],"occ":[4.3,4.7,4,2,1.2,4,4.2,5.2,7,7.0],"t":"s"},{"name":"HONU males","cap":[15.3,14,16,16,16,16,16,16,16,16.0],"occ":[11.7,9,7.2,6.5,0.8,4.2,11.2,12.8,11.4,8.2],"t":"s"},{"name":"Ka'aahi","cap":[186.7,180,180,180,180,172.4,154,157,169,169.5],"occ":[151.3,130.2,121.8,131,135.2,119.2,122.2,130.2,138.8,146.5],"t":"s"},{"name":"Kauhale @ Iwilei (MHK)","cap":[50,50,50,50,50,49.8,49.2,48,48.2,48.8],"occ":[20.2,21,43.8,46.2,43.5,41.8,42.5,44,44.2,44.2],"t":"s"},{"name":"Kauhale Health Kauhale","cap":[30,30,30,30,30,30,30,30,30,30.0],"occ":[25.8,19,25.8,29.2,25.8,24,24.2,28,27.6,26.5],"t":"s"},{"name":"Keauhou","cap":[75.7,75.4,76,76,75.8,74.0,74.8,76,76,76.0],"occ":[74.2,74.9,75.7,75.3,75.1,72,73.8,76,75.6,75.5],"t":"s"},{"name":"Kulaokahua (FAC+Womens)","cap":[90.8,92.2,93,85.8,84.9,84,53.5,46.8,46.8,42.0],"occ":[81.6,88.2,93,85.8,84.9,84,53.5,46.8,46.8,42.0],"t":"s"},{"name":"Onalauena","cap":[252.2,265.3,266.1,275.2,273.6,261.3,198,206.2,202.4,218.5],"occ":[239.6,263.4,259.6,272.4,273.6,259,196,202.2,199.8,218.5],"t":"s"},{"name":"Onemalu","cap":[null,null,null,null,null,null,167.0,167.0,167,167.0],"occ":[null,null,null,null,null,null,167.0,157.0,167,167.0],"t":"s"},{"name":"Sumner","cap":[142,148,148,148,148,148.4,122,126.6,127,130.0],"occ":[118,114.2,122.8,125.5,126.2,136.2,99,106.6,109,118.8],"t":"s"},{"name":"The Shelter","cap":[null,null,null,null,null,36,28.0,20,20,20.0],"occ":[null,null,null,null,null,36,28.0,20,20,20.0],"t":"s"},{"name":"Waimanalo Emergency Shelter","cap":[139.8,147,147,147,147,147,111,109.8,111,111.0],"occ":[139,146.1,147,145.9,146.8,146.6,109.5,109.8,111,111.0],"t":"s"},{"name":"WCC Kulia I Ka Nu'u","cap":[19,19,19,19,19,19,19,19,19,19.0],"occ":[19,19,19,19,17.5,16.8,18,18.4,18.4,16.5],"t":"s"},{"name":"WCC Pai'olu Kaiaulu","cap":[223,223,223,223,222.3,222.0,222.5,280,280,280.0],"occ":[164.9,173.2,177.9,204.2,191.8,202.8,213,278.8,280,280.0],"t":"s"},{"name":"Kauhale Health Clinic","t":"r","cap":[32.0,32.0,31.0,31.0,31.0,31.0,31.0,31.0,31.0,31.0],"occ":[26.8,27.7,28.6,30.8,27.2,29.6,30.0,28.0,28.8,29.2]},{"name":"Leahi Respite","t":"r","cap":[24.0,24.0,24.0,24.0,24.0,23.6,24.0,24.0,24.0,24.0],"occ":[23.2,24.0,22.0,23.0,21.2,20.8,23.8,24.0,23.2,23.0]},{"name":"Hawaii Homeless Healthcare Hui (H4)","t":"r","cap":[null,null,null,null,null,30.0,30.0,30.0,30.0,30.2],"occ":[null,null,null,null,null,28.7,29.0,27.8,23.4,27.0]},{"name":"Kumu Ola Hou Phase I","t":"r","cap":[15.0,14.5,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0],"occ":[13.5,13.5,15.0,15.0,14.8,15.0,15.0,15.0,14.6,14.2]},{"name":"Kumu Ola Hou Phase II","t":"r","cap":[38.0,35.5,37.0,37.0,37.0,37.0,37.0,37.0,37.0,37.0],"occ":[25.5,29.5,30.6,30.8,32.2,31.8,33.5,32.8,35.2,36.5]},{"name":"Imi Ola Piha","t":"r","cap":[8.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0,8.0],"occ":[6.0,4.0,5.0,5.8,4.5,5.2,5.0,6.0,5.2,6.2]},{"name":"TTB's Respite: Kahai","t":"r","cap":[null,null,null,14.0,22.0,22.0,22.0,22.0,22.0,22.0],"occ":[null,null,null,8.0,13.2,18.6,17.8,16.4,15.4,14.8]},{"name":"TTB's Respite: Makiki","t":"r","cap":[10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0,10.0],"occ":[8.0,8.2,8.4,8.0,8.8,8.4,9.0,9.2,8.6,8.8]},{"name":"TTB's Respite: Kilohana","t":"r","cap":[20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0,20.0],"occ":[12.2,12.5,15.0,15.8,13.2,13.6,16.5,15.0,15.6,17.2]},{"name":"TTB's Respite: Haumana + VET House","t":"r","cap":[12.0,12.0,12.0,12.0,12.0,12.0,12.0,12.0,12.0,12.0],"occ":[7.8,8.0,6.4,6.0,9.5,8.6,6.2,6.2,7.6,7.2]},{"name":"Sand Island Treatment Center","t":"r","cap":[null,null,null,null,null,null,123.0,123.0,123.0,123.0],"occ":[null,null,null,null,null,null,110.2,113.6,113.0,112.0]}],"notes":[["Coverage","Covers January through October 2026. October uses all four weekly observations (Oct 5, 12, 19 and 26).","UPDATED"],["January–February","For non-HPO programs, values use available entries in Original Monday Numbers and remain provisional where underlying census reporting was incomplete.","PROVISIONAL"],["HPO overlap, Jan–Jun","Hau'ula FAC, Keauhou, Kulaokahua, Onalauena, Waimanalo and WCC Pai'olu use the HPO daily vacancy reports. Each unit type is converted to beds with its maximum people per unit (for example a Waimanalo studio counts as 3). Capacity is units in service times that number; occupied is units in service minus open units times that number; months average the reporting days, leaving out four blank report days (Feb 9, Feb 28, Mar 13, Apr 10). Pai'olu counts Families (2-4) as 4, Couples as 2 and Singles as 1.","RECONCILED"],["July–October","Uses the monthly Bed Fulfillment sheets. Monthly capacity and occupancy are averages of the reported weekly observations.","RECONCILED"],["Ka'aahi","Uses Bed Fulfillment / census reporting only. HPO figures intentionally excluded.","RULE"],["Sumner","Uses Bed Fulfillment / census reporting only. HPO figures intentionally excluded.","RULE"],["Family Promise","Combined Wahiawa ONC + Mo'ili'ili + Nu'uanu/Pearl City/scattered Family Promise sites. FAC Waianae is separate.","COMBINED"],["Kulaokahua","Family Assessment Center + Emergency Women's Shelter combined.","COMBINED"],["Kauhale Health Kauhale","Uses the Kauhale-bed program only; clinic beds are excluded because they are a separate program.","CORRECTED"],["Hale Imi Ola","Combined Emergency Shelter and Transitional Housing/Bridge programs. August to October add the two rows' weekly capacity and occupancy before averaging (updated from the master report, which used the Emergency Shelter row only). January to July use the single program row.","COMBINED"],["Onemalu","January–June blank. Not an emergency shelter until July.","RULE"],["Blank cells","Blank means no usable data / not yet active, not zero occupancy.","RULE"],["Occupancy %","Calculated as average occupancy divided by average capacity for each program/month.","FORMULA"],["Values over 100%","Retained when the source reports occupancy above reported capacity; these are not capped at 100%.","RULE"],["Alana Ola Pono (AOP)","September week of the 14th was entered as 50 occupied of 49 capacity. Corrected to 49 of 49, so the September average is 48.4 instead of 48.6.","CORRECTED"],["Corrections","Source entries corrected on review: The Shelter July now 28 of 28 (a text-formatted entry had dropped out of the average); Hale Mauliola March weeks of the 23rd and 30th set to 50 of 50; Ka'aahi June week of the 15th Working row set to 4 of 10; Ka'aahi August week of the 17th Families row set to 75 of 75; Family Promise Wahiawa March weeks of the 16th and 23rd set to 63 of 63. Onemalu July set to 167 of 167 (full); August has its first two weekly reports (Aug 6 and 13) at 85% (142 of 167) and the rest full, so the August average is 157.0 of 167 (94%). FAC Waianae May (51 of 50) was confirmed as a real over-capacity count.","CORRECTED"],["Hau'ula FAC","October capacity is 26 in the updated Bed Fulfillment file; the earlier file showed 20 for the same weeks. August and September are unchanged.","UPDATED"]]};
+const ALL=DATA.progs;
+let P=ALL;
+const ML=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'];
+const MFULL=['January','February','March','April','May','June','July','August','September','October'];
+const nf=new Intl.NumberFormat('en-US');
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const has=(p,m)=>p.cap[m]!=null&&p.occ[m]!=null&&p.cap[m]>0;
+const pct=(p,m)=>has(p,m)?p.occ[m]/p.cap[m]:null;
+const state={m:9,prog:0,type:'all',sort:{k:'cap',dir:-1}};
+// default detail program: largest by capacity in last month
+function pickDefault(){state.prog=P.map((p,i)=>i).sort((a,b)=>(P[b].cap[9]||0)-(P[a].cap[9]||0))[0];}
+const TYPES=[['all','All programs'],['s','Emergency shelters'],['r','Medical respite & treatment']];
+function applyType(){P=state.type==='all'?ALL:ALL.filter(p=>p.t===state.type);SYS=ML.map((_,m)=>sys(m));pickDefault();}
+
+function sys(m){let c=0,o=0,n=0;P.forEach(p=>{if(has(p,m)){c+=p.cap[m];o+=p.occ[m];n++;}});return {cap:c,occ:o,pct:c?o/c:null,n};}
+let SYS=ML.map((_,m)=>sys(m));
+pickDefault();
+const f0=v=>nf.format(Math.round(v)), f1=v=>(Math.round(v*10)/10).toLocaleString('en-US');
+const pc=v=>Math.round(v*100)+'%';
+
+/* ---------- generic line chart ---------- */
+function lineChart(el,o){
+  const W=Math.max(300,el.clientWidth), H=o.h||250, m={l:44,r:W<480?14:(o.labels?120:14),t:10,b:26};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b, X=i=>m.l+i/(ML.length-1)*iw;
+  let lo=o.ymin??0, hi=o.ymax;
+  if(hi==null){let mx=0;o.series.forEach(s=>s.vals.forEach(v=>{if(v!=null&&v>mx)mx=v;})); const p=Math.pow(10,Math.floor(Math.log10(mx*1.05||1))); hi=[1,2,2.5,5,10].map(k=>k*p).find(v=>v>=mx*1.05);}
+  const Y=v=>m.t+ih-(v-lo)/(hi-lo)*ih;
+  let g='<g class="grid axis">';
+  for(let k=0;k<=4;k++){const v=lo+(hi-lo)*k/4; g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${m.l-8}" y="${Y(v)+4}" text-anchor="end">${o.yfmt(v)}</text>`;}
+  g+='</g><g class="axis">'+ML.map((l,i)=>`<text x="${X(i)}" y="${H-6}" text-anchor="${i===0?'start':i===ML.length-1?'end':'middle'}">${l}</text>`).join('')+'</g>';
+  (o.refs||[]).forEach(r=>{g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(r.v)}" y2="${Y(r.v)}" stroke="var(--muted)" stroke-dasharray="4 4" opacity=".7"/>`;});
+  const labs=[];
+  o.series.forEach(s=>{
+    if(s.area){let d='',first=-1,last=-1;s.vals.forEach((v,i)=>{if(v!=null){if(first<0)first=i;last=i;d+=(d?'L':'M')+X(i)+' '+Y(v);}}); if(first>=0) g+=`<path d="${d}L${X(last)} ${Y(lo)}L${X(first)} ${Y(lo)}Z" fill="${s.color}" opacity=".14"/>`;}
+    let d='',pen=false; s.vals.forEach((v,i)=>{if(v==null){pen=false;return;} d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1); pen=true;});
+    g+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" ${s.dash?'stroke-dasharray="6 4"':''} stroke-linejoin="round" stroke-linecap="round"/>`;
+    s.vals.forEach((v,i)=>{if(v!=null) g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===state.m?4.5:2.5}" fill="${s.color}" stroke="var(--card)" stroke-width="${i===state.m?2:1.5}"/>`;});
+    let li=-1; s.vals.forEach((v,i)=>{if(v!=null)li=i;}); if(li>=0) labs.push({n:s.name,c:s.color,y:Y(s.vals[li]),x:X(li)});
+  });
+  if(o.labels&&W>=480){labs.sort((a,b)=>a.y-b.y);for(let k=1;k<labs.length;k++)if(labs[k].y-labs[k-1].y<14)labs[k].y=labs[k-1].y+14; labs.forEach(l=>{g+=`<text x="${l.x+9}" y="${l.y+4}" style="fill:var(--ink)" font-size="11.5">${esc(l.n)}</text>`;});}
+  g+=`<line x1="${X(state.m)}" x2="${X(state.m)}" y1="${m.t}" y2="${m.t+ih}" stroke="var(--ink)" stroke-dasharray="3 3" opacity=".55"/>`;
+  g+=`<line id="xh" y1="${m.t}" y2="${m.t+ih}" stroke="var(--muted)" style="display:none"/><rect id="ov" x="${m.l-10}" y="${m.t}" width="${iw+20}" height="${ih}" fill="transparent" style="cursor:pointer"/>`;
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.aria)}">${g}</svg><div class="tip" style="display:none"></div>`;
+  const svg=el.querySelector('svg'),ov=el.querySelector('#ov'),xh=el.querySelector('#xh'),tip=el.querySelector('.tip');
+  const near=ev=>{const r=svg.getBoundingClientRect(),px=(ev.clientX-r.left)*(W/r.width);return {i:Math.max(0,Math.min(ML.length-1,Math.round((px-m.l)/iw*(ML.length-1)))),k:r.width/W};};
+  ov.addEventListener('pointermove',ev=>{const {i,k}=near(ev);xh.setAttribute('x1',X(i));xh.setAttribute('x2',X(i));xh.style.display='';
+    tip.innerHTML=`<b>${MFULL[i]}</b>`+o.series.map(s=>`<div class="r"><span><i style="background:${s.color}"></i>${esc(s.name)}</span><b class="num">${s.vals[i]==null?'no data':o.tfmt(s.vals[i])}</b></div>`).join('')+(o.extra?o.extra(i):'');
+    tip.style.display='block';const tw=tip.offsetWidth,l=X(i)*k+14;tip.style.left=(l+tw>el.clientWidth?X(i)*k-tw-14:l)+'px';tip.style.top='8px';});
+  ov.addEventListener('pointerleave',()=>{xh.style.display='none';tip.style.display='none';});
+  ov.addEventListener('click',ev=>{state.m=near(ev).i;render();});
+}
+
+/* ---------- sections ---------- */
+function controls(){
+  const te=$('#f-type');te.innerHTML='';
+  TYPES.forEach(([v,l])=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.setAttribute('aria-pressed',String(state.type===v));b.onclick=()=>{state.type=v;applyType();render();};te.appendChild(b);});
+  const el=$('#f-month');el.innerHTML='';
+  ML.forEach((l,i)=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.setAttribute('aria-pressed',String(state.m===i));b.onclick=()=>{state.m=i;render();};el.appendChild(b);});
+}
+function kpis(){
+  const m=state.m,s=SYS[m],pv=m>0?SYS[m-1]:null;
+  const full=P.filter(p=>has(p,m)&&pct(p,m)>=1).length, low=P.filter(p=>has(p,m)&&pct(p,m)<.7).length;
+  const dl=(a,b,u)=>pv?`${a-b>=0?'+':'−'}${u==='pp'?Math.abs(Math.round((a-b)*100))+' pts':f0(Math.abs(a-b))} vs ${ML[m-1]}`:'First month in report';
+  const t=(l,v,d)=>`<div class="kpi"><div class="lbl">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`;
+  $('#kpis').innerHTML=
+    t('System occupancy',`${Math.round(s.pct*100)}<small>%</small>`,dl(s.pct,pv&&pv.pct,'pp'))+
+    t('Avg occupied beds',f0(s.occ),dl(s.occ,pv&&pv.occ))+
+    t('Avg capacity',f0(s.cap),dl(s.cap,pv&&pv.cap))+
+    t('At or over capacity',`${full}<small> of ${s.n}</small>`,'Programs averaging 100% or more')+
+    t('Under 70% occupied',`${low}<small> of ${s.n}</small>`,'Programs with room to fill');
+}
+function charts(){
+  $('#lg1').innerHTML=`<span><i style="background:var(--muted)"></i>Avg capacity</span><span><i style="background:var(--s1)"></i>Avg occupied</span>`;
+  lineChart($('#c1'),{aria:'Capacity and occupied beds by month',yfmt:f0,tfmt:f0,h:250,labels:true,
+    series:[{name:'Capacity',color:'var(--muted)',dash:true,vals:SYS.map(s=>s.cap)},{name:'Occupied',color:'var(--s1)',area:true,vals:SYS.map(s=>s.occ)}],
+    extra:i=>`<div class="r" style="margin-top:3px"><span>Programs reporting</span><b class="num">${SYS[i].n}</b></div>`});
+  $('#lg2').innerHTML=`<span><i style="background:var(--s1)"></i>Occupied ÷ capacity</span><span><i style="background:var(--muted);height:0;border-top:2px dashed var(--muted)"></i>100%</span>`;
+  const vals=SYS.map(s=>s.pct), mn=Math.min(...vals);
+  lineChart($('#c2'),{aria:'System occupancy by month',yfmt:v=>Math.round(v*100)+'%',tfmt:v=>Math.round(v*1000)/10+'%',h:250,
+    ymin:Math.floor((mn-.03)*20)/20,ymax:1.0,refs:[{v:1}],series:[{name:'System occupancy',color:'var(--s1)',vals}],
+    extra:i=>`<div class="r" style="margin-top:3px"><span>Programs reporting</span><b class="num">${SYS[i].n}</b></div>`});
+}
+function bin(v){return v<.5?1:v<.7?2:v<.85?3:v<.95?4:5;}
+const BC=['','var(--h1)','var(--h2)','var(--h3)','var(--h4)','var(--h5)'], TC=['','var(--t1)','var(--t2)','var(--t3)','var(--t4)','var(--t5)'];
+function heat(){
+  $('#hm-legend').innerHTML='<span>Occupancy</span>'+[['under 50%',1],['50 to 69%',2],['70 to 84%',3],['85 to 94%',4],['95% and up',5]].map(([l,b])=>`<span style="display:inline-flex;align-items:center;gap:5px"><i style="background:${BC[b]}"></i>${l}</span>`).join('')+
+   '<span style="display:inline-flex;align-items:center;gap:5px"><svg width="18" height="12"><rect width="18" height="12" rx="2" fill="var(--cell0)"/><rect width="18" height="12" rx="2" fill="url(#hatch)"/></svg>No data</span><span>▲ over 100%</span>';
+  const el=$('#heat'),W=Math.max(640,el.clientWidth),lw=Math.min(240,W*.3),rh=26,top=22,cw=(W-lw)/ML.length;
+  let g='<defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="var(--muted)" stroke-width="1.2" opacity=".55"/></pattern></defs><g class="axis">';
+  ML.forEach((l,i)=>{g+=`<text x="${lw+i*cw+cw/2}" y="13" text-anchor="middle" ${i===state.m?'style="fill:var(--ink);font-weight:600"':''}>${l}</text>`;});g+='</g>';
+  P.forEach((p,r)=>{const y=top+r*rh;
+    if(state.type==='all'&&r>0&&p.t!==P[r-1].t){g+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="var(--ink)" stroke-width="1.5" opacity=".6"/>`;}
+    g+=`<text x="0" y="${y+rh/2+4}" style="fill:${r===state.prog?'var(--ink)':'var(--muted)'}" font-size="12" ${r===state.prog?'font-weight="600"':''}>${esc(p.name.length>32?p.name.slice(0,31)+'…':p.name)}</text>`;
+    ML.forEach((_,m)=>{const x=lw+m*cw,v=pct(p,m);
+      if(v==null) g+=`<rect x="${x+1}" y="${y+1}" width="${cw-2}" height="${rh-2}" rx="3" fill="var(--cell0)"/><rect class="hatch" x="${x+1}" y="${y+1}" width="${cw-2}" height="${rh-2}" rx="3" data-p="${r}" data-m="${m}"/>`;
+      else{const b=bin(v);g+=`<rect x="${x+1}" y="${y+1}" width="${cw-2}" height="${rh-2}" rx="3" fill="${BC[b]}" data-p="${r}" data-m="${m}"/><text x="${x+cw/2}" y="${y+rh/2+4}" text-anchor="middle" font-size="11.5" style="fill:${TC[b]};pointer-events:none" class="num">${Math.round(v*100)}${v>1.005?'▲':''}</text>`;}});
+  });
+  const hh=top+P.length*rh;
+  g+=`<rect x="${lw+state.m*cw}" y="${top-3}" width="${cw}" height="${P.length*rh+3}" fill="none" stroke="var(--ink)" stroke-width="1.5" rx="3" opacity=".7" pointer-events="none"/>`;
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${hh}" role="img" aria-label="Occupancy by program and month">${g}</svg><div class="tip" style="display:none"></div>`;
+  const svg=el.querySelector('svg'),tip=el.querySelector('.tip');
+  svg.addEventListener('pointermove',ev=>{const t=ev.target;if(!t.dataset||t.dataset.p==null){tip.style.display='none';return;}
+    const p=P[+t.dataset.p],m=+t.dataset.m;
+    tip.innerHTML=`<b>${esc(p.name)}</b><div style="color:var(--muted)">${MFULL[m]}</div>`+(has(p,m)?`<div class="r"><span>Occupancy</span><b class="num">${Math.round(pct(p,m)*1000)/10}%</b></div><div class="r"><span>Avg occupied</span><span class="num">${f1(p.occ[m])}</span></div><div class="r"><span>Avg capacity</span><span class="num">${f1(p.cap[m])}</span></div>`:'<div>No usable data this month</div>');
+    tip.style.display='block';const r=el.getBoundingClientRect(),e=ev.clientX-r.left,tw=tip.offsetWidth;tip.style.left=(e+tw+24>el.clientWidth?e-tw-12:e+12)+'px';tip.style.top=(ev.clientY-r.top+14)+'px';});
+  svg.addEventListener('pointerleave',()=>{tip.style.display='none';});
+  svg.addEventListener('click',ev=>{const t=ev.target;if(t.dataset&&t.dataset.p!=null){state.prog=+t.dataset.p;state.m=+t.dataset.m;render();const d=document.getElementById('detail-title');}});
+}
+function detail(){
+  const p=P[state.prog];
+  const sel=$('#prog');sel.innerHTML='';P.forEach((q,i)=>sel.add(new Option(q.name,i)));sel.onchange=()=>{state.prog=+sel.value;render();};
+  sel.value=state.prog;
+  $('#detail-title').textContent=p.name;
+  $('#lg3').innerHTML=`<span><i style="background:var(--muted)"></i>Avg capacity</span><span><i style="background:var(--s1)"></i>Avg occupied</span>`;
+  lineChart($('#c3'),{aria:`${p.name} capacity and occupied by month`,yfmt:f0,tfmt:v=>f1(v),h:240,labels:true,
+    series:[{name:'Capacity',color:'var(--muted)',dash:true,vals:p.cap.map(v=>v==null?null:v)},{name:'Occupied',color:'var(--s1)',area:true,vals:p.occ.map(v=>v==null?null:v)}],
+    extra:i=>has(p,i)?`<div class="r" style="margin-top:3px"><span>Occupancy</span><b class="num">${Math.round(pct(p,i)*1000)/10}%</b></div>`:''});
+}
+function spark(p){
+  const w=110,h=24,pts=[];ML.forEach((_,m)=>{const v=pct(p,m);if(v!=null)pts.push([m/(ML.length-1)*(w-6)+3,h-3-Math.min(1.1,v)/1.1*(h-6)]);});
+  if(!pts.length)return '';const d=pts.map((q,k)=>(k?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(''),l=pts[pts.length-1];
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="Occupancy trend"><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round"/><circle cx="${l[0]}" cy="${l[1]}" r="2.5" fill="var(--accent)"/></svg>`;
+}
+const COLS=[['name','Program'],['cap','Avg capacity'],['occ','Avg occupied'],['pct','Occupancy'],['chg','Change'],['tr','Trend']];
+function table(){
+  const m=state.m;
+  const rows=P.map((p,i)=>({i,name:p.name,cap:has(p,m)?p.cap[m]:-1,occ:has(p,m)?p.occ[m]:-1,pct:has(p,m)?pct(p,m):-1,chg:(m>0&&has(p,m)&&has(p,m-1))?pct(p,m)-pct(p,m-1):-9}));
+  const k=state.sort.k,dir=state.sort.dir;
+  rows.sort((a,b)=>k==='name'?dir*a.name.localeCompare(b.name):(a[k]-b[k])?dir*(a[k]-b[k]):a.name.localeCompare(b.name));
+  $('#table-title').textContent=`Programs in ${MFULL[m]}`;
+  let h='<thead><tr>'+COLS.map(([key,l])=>`<th scope="col" aria-sort="${state.sort.k===key?(state.sort.dir>0?'ascending':'descending'):'none'}">${key==='tr'?l:`<button type="button" data-k="${key}">${l}</button>`}</th>`).join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{const ok=r.cap>=0;
+    h+=`<tr class="prog ${r.i===state.prog?'sel':''}" tabindex="0" data-i="${r.i}"><td><span class="nm">${esc(r.name)}${state.type==='all'&&P[r.i].t==='r'?' <span class="chip">respite / treatment</span>':''}</span></td>`+
+    (ok?`<td>${f1(r.cap)}</td><td>${f1(r.occ)}</td><td><div class="occbar"><div class="track"><div class="fill" style="width:${Math.min(100,r.pct*100)}%"></div></div><span>${Math.round(r.pct*100)}%${r.pct>1.005?' ▲':''}</span></div></td>`:`<td colspan="3" style="text-align:right;color:var(--muted)">No data this month</td>`)+
+    `<td class="${r.chg>0?'up':'dn'}">${r.chg===-9?'–':(r.chg>=0?'+':'−')+Math.abs(Math.round(r.chg*100))+' pts'}</td><td>${spark(P[r.i])}</td></tr>`;});
+  $('#tbl').innerHTML=h+'</tbody>';
+  $('#tbl').querySelectorAll('th button').forEach(b=>b.onclick=()=>{const kk=b.dataset.k;state.sort=state.sort.k===kk?{k:kk,dir:-state.sort.dir}:{k:kk,dir:kk==='name'?1:-1};table();});
+  $('#tbl').querySelectorAll('tr.prog').forEach(tr=>{const go=()=>{state.prog=+tr.dataset.i;render();};tr.onclick=go;tr.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
+}
+function notes(){
+  $('#notes').innerHTML=DATA.notes.map(([a,b,c])=>`<div><b>${esc(a)} <span class="chip ${c==='PROVISIONAL'?'warn':''}">${esc(String(c).toLowerCase())}</span></b><p>${esc(b)}</p></div>`).join('');
+}
+function render(){controls();kpis();charts();heat();detail();table();}
+render();
+let rt;new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(()=>{charts();heat();detail();},120);}).observe(document.querySelector('.wrap'));
+</script>
+
+</body></html>
